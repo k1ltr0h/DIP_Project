@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <windows.h>
 #include <thread>
+#include <queue>
+#include <mutex>          // std::mutex
 #include "opencv2\opencv.hpp" 
 #include "opencv2\videoio.hpp"
 

@@ -1,6 +1,3 @@
-#include <dirent.h>
-#include <queue>
-#include <mutex>          // std::mutex
 #include "RecButton.h"
 #include "env.h"
 
@@ -21,7 +18,6 @@ enum recording {OFF, ON};
 
 //--- INITIALIZE VIDEOCAPTURE
 RecButton* rec_Button;
-Button* reconnect_Button;
 cv::VideoCapture cap;
 cv::VideoWriter video;
 std::queue<cv::Mat> frames;
@@ -69,18 +65,19 @@ int main(int, char**){
     //int ex = static_cast<int>(video.get(CAP_PROP_FOURCC));
     //--- GRAB AND WRITE LOOP
     printf("Start grabbing\nPress ESC key or X button to terminate\n");
+
     //cap.read(frame);
     //printf("%d-%d\n", cap.get(CAP_PROP_FRAME_WIDTH), cap.get(CAP_PROP_FRAME_HEIGHT));
+
     std::thread read(receive, &frame);
     std::thread disp(displayAndRec);
-    //thread recVideo(rec, &frame);
+
     read.detach();
     disp.detach();
-    //recVideo.detach();
 
     while(true){
         //Cierra la ventana al apretar la X de la esquina superior derecha
-        if(!cv::getWindowProperty("Live",cv::WND_PROP_VISIBLE)){
+        if(!cv::getWindowProperty("Live", cv::WND_PROP_VISIBLE)){
             break;
         }
 
@@ -99,7 +96,6 @@ int main(int, char**){
 	cap.release();
 	video.release();
     cv::destroyAllWindows();
-    delete reconnect_Button;
     delete rec_Button;
     delete url;
     
@@ -170,9 +166,7 @@ void displayAndRec(){
                 tmp = frames.front();
                 frames.pop();
                 if(rec_Button->getState() == ON){
-                    printf("holo");
                     video.write(tmp);
-                    printf("hola");
                     cv::putText(tmp, "Grabando", cv::Point(10, tmp.rows / 10), //top-left position
                     cv::FONT_HERSHEY_TRIPLEX, 1.0, CV_RGB(255, 0, 0), 2);
                 }
