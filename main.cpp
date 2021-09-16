@@ -44,6 +44,29 @@ int main(int, char**){
     //createButton("Grabar",record,NULL,QT_CHECKBOX,0);// Need QT
 
     cv::Mat frame;
+    // Imagen de carga
+    frame = cv::imread("./Grote.png", cv::IMREAD_COLOR);
+
+    cv::imshow("Live", frame);
+
+    // Read image byte for byte
+    unsigned char* pix = frame.data;
+    int ch = frame.channels();
+    int rows = frame.rows;
+    int cols = frame.cols;
+    int step = frame.step;
+    
+    printf("step = %d - channels = %d - rows = %d - cols = %d\n", step, ch, rows, cols); // "make test" for see prints
+
+    for(int i = 0; i < rows; i++){
+        printf("\n");
+        for(int j = 0; j < cols; j++){
+            for(int c = 0; c < ch; c++){
+                printf("%u ", (unsigned int)pix[i*step + ch*j + c]);
+            }
+        }
+    }
+    // End of read
 
     if(frames.empty()){
         printf("\nqueue empty\n");
