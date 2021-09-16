@@ -47,9 +47,18 @@ int main(int, char**){
     // Imagen de carga
     frame = cv::imread("./Grote.png", cv::IMREAD_COLOR);
 
+    // Mod part of the Mat "Roi"
+
+    cv::Mat mod(frame, cv::Rect(62, 45, 20, 20)); //x, y, w, h 
+
+    mod = cv::Scalar(100, 100, 100); // Some gray
+    
+    // End of mod "Roi"
+
     cv::imshow("Live", frame);
 
     // Read image byte for byte
+/*
     unsigned char* pix = frame.data;
     int ch = frame.channels();
     int rows = frame.rows;
@@ -58,16 +67,24 @@ int main(int, char**){
     
     printf("step = %d - channels = %d - rows = %d - cols = %d\n", step, ch, rows, cols); // "make test" for see prints
 
+    ///cv::Mat_<cv::Vec3b> fancy = frame; 3th method
+
     for(int i = 0; i < rows; i++){
         printf("\n");
         for(int j = 0; j < cols; j++){
             for(int c = 0; c < ch; c++){
                 printf("%u ", (unsigned int)pix[i*step + ch*j + c]);
             }
+            // or
+            ///cv::Vec3b pixel = frame.at<unsigned char>(i, j);
+            ///printf("%u-%u-%u ", pixel.val[0], pixel.val[1], pixel.val[2]);
+            // or
+            ///printf("%u-%u-%u ", fancy(i,j)[0], fancy(i,j)[1], fancy(i,j)[2]);
+            
         }
     }
+*/
     // End of read
-
     if(frames.empty()){
         printf("\nqueue empty\n");
     }
